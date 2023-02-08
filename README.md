@@ -1,11 +1,12 @@
-Small tool for monitoring a system information. Starts an HTTP server and in a parallel process runs a code
-that accumulates statistical information about the system in the database.
-Understands two types of Get request. If the request is of the form
-http://hostname/current then the current information will be returned.
-If http:/hostname/stat/?time1=t1&time2=t2, then records from the database
-in the "data" range between t1 and t2 will be returned if they were
-previously stored there.
-The current information is returned as a dictionary converted to JSON format.
-Its contents may differ depending on the OS. Statistical information consists
-of the same set of characteristics as information for the current moment, but
-for each moment of time within the specified interval as the list.
+The tool for remote monitoring of some system information. Server system information runs two parallel threads. In the first thread, system information is collected and stored in the database at a specified frequency. The second thread is an http server that returns either the current system data or the data for the specified period, if they are in the database.
+The Http server accepts two types of Get requests:
+
+http://HostName:Port/current
+The current system data will be returned.
+and
+
+http://HostName:Port/stat?time1={time interval start}&time2={time interval finish}
+The data accumulated in the database for the specified time interval will be returned.
+
+System information includes: RAM usage, disk space usage and network information (packets sent/received)
+
