@@ -1,3 +1,4 @@
+# SIServer
 The tool for remote monitoring of some system information. Server system information runs two parallel threads. In the first thread, system information is collected and stored in the database at a specified frequency. The second thread is an http server that returns either the current system data or the data for the specified period, if they are in the database.
 The Http server accepts two types of Get requests:
 
