@@ -3,8 +3,9 @@ The Http server accepts two types of Get requests:
 http://HostName:Port/current
 The current system data will be returned.
 and
-http://HostName:Port/stat?time1={time interval start}&time2={time interval finish}
-The data accumulated in the database for the specified time interval will be returned.
+http://HostName:Port/stat?time1={time interval start}&time2={time interval
+finish} The data accumulated in the database for the specified time
+interval will be returned.
 
 '''
 
@@ -18,20 +19,22 @@ class ServerInfoRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         '''
-        Returns a result depending on the content of the request. If URL = /current, 
-        then current data will be returned, if /stat, then data will be returned for a 
-        period between time1 and time2 previously stored in the database.
+        Returns a result depending on the content of the request. If
+        URL = /current, then current data will be returned, if /stat,
+        then data will be returned for a period between time1 and
+        time2 previously stored in the database.
         '''
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
         urlres = urlparse(self.path)
-        if  urlres.path == '/current' or urlres.path == '/current/':
+        if urlres.path == '/current' or urlres.path == '/current/':
             SysInfo = json.dumps(collect_info(), )
         elif urlres.path == '/stat/' or urlres.path == '/stat':
-            param = self.pars_q(urlres.query) 
-            if self.dBase != None:
-                records = self.dBase.retrive_from_db(param['time1'], param['time2'])  
+            param = self.pars_q(urlres.query)
+            if self.dBase is not None:
+                records = self.dBase.retrive_from_db(param['time1'],
+                                                     param['time2'])
                 res = {}
                 list_rec = []
                 for row in records:
@@ -45,7 +48,6 @@ class ServerInfoRequestHandler(BaseHTTPRequestHandler):
         else:
             SysInfo = "Invalid request!!!"
         self.wfile.write(bytes(SysInfo, "utf-8"))
- 
 
     def pars_q(self, query):
         '''Pars HTML query and returns parameters'''
@@ -68,5 +70,3 @@ class ServerInfoRequestHandler(BaseHTTPRequestHandler):
         else:
             return None
         return dic_par
-        
-
